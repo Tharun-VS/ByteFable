@@ -18,6 +18,8 @@ const ServiceDetailsPage = () => {
       description:
         "Professional repair services for all laptop brands with quick turnaround times.",
       icon: "laptop",
+      image:
+        "https://images.unsplash.com/photo-1588702547919-26089e690ecc?w=800&q=80",
       benefits: [
         "Fast diagnosis and repair",
         "Certified technicians",
@@ -59,6 +61,8 @@ const ServiceDetailsPage = () => {
       description:
         "Custom AI and machine learning solutions tailored to your business needs.",
       icon: "lightbulb",
+      image:
+        "https://images.unsplash.com/photo-1677442135136-760c813770c6?w=800&q=80",
       benefits: [
         "Custom AI model development",
         "Data analysis and preparation",
@@ -107,6 +111,8 @@ const ServiceDetailsPage = () => {
       description:
         "Innovative IoT hardware solutions to automate and enhance your operations.",
       icon: "smartphone",
+      image:
+        "https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?w=800&q=80",
       benefits: [
         "Custom hardware design",
         "Seamless connectivity",
@@ -154,6 +160,8 @@ const ServiceDetailsPage = () => {
       description:
         "Modern, responsive websites and web applications built with the latest technologies.",
       icon: "code",
+      image:
+        "https://images.unsplash.com/photo-1547658719-da2b51169166?w=800&q=80",
       benefits: [
         "Responsive design that works on all devices",
         "SEO-friendly architecture",
@@ -203,6 +211,8 @@ const ServiceDetailsPage = () => {
       description:
         "User-centered design that creates intuitive and engaging digital experiences.",
       icon: "palette",
+      image:
+        "https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&q=80",
       benefits: [
         "User-centered design approach",
         "Intuitive navigation and interactions",
@@ -258,8 +268,15 @@ const ServiceDetailsPage = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="py-12">
-        <Container>
+      <main className="py-12 relative">
+        <div className="absolute inset-0 z-0 opacity-5">
+          <img
+            src="https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?w=1200&q=80"
+            alt="Service details background"
+            className="w-full h-full object-cover"
+          />
+        </div>
+        <Container className="relative z-10">
           {service ? (
             <ServiceDetails
               service={service}

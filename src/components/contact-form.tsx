@@ -33,42 +33,55 @@ export default function ContactForm({
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    // Map form field names to state properties
+    const fieldMap: Record<string, string> = {
+      from_name: "name",
+      from_email: "email",
+      message: "message",
+    };
+
+    const stateKey = fieldMap[name] || name;
+    setFormData((prev) => ({ ...prev, [stateKey]: value }));
   };
 
   const handleServiceChange = (value: string) => {
     setFormData((prev) => ({ ...prev, service: value }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
-      // Prepare template parameters for EmailJS
-      const templateParams = {
-        from_name: formData.name,
-        from_email: formData.email,
-        service_interest: formData.service,
-        message: formData.message,
-        to_email: "bytefixers2024@gmail.com",
-      };
+      // We're using hardcoded public key now, so no need to check for it
+      if (!import.meta.env.VITE_EMAILJS_TEMPLATE_ID) {
+        console.warn("EmailJS Template ID is not configured, using fallback");
+      }
 
-      // Initialize EmailJS (should ideally be done in a useEffect or app initialization)
-      emailjs.init("YOUR_PUBLIC_KEY"); // Replace with your actual public key
+      // Initialize EmailJS with your public key
+      emailjs.init("Cr5DF6euURjveltPn");
 
-      // Send email using EmailJS
+      // Create a form data object with the recipient email
+      const formElement = e.currentTarget;
+
+      // Send email using EmailJS with hardcoded values
       const response = await emailjs.send(
-        "YOUR_SERVICE_ID", // Replace with your actual EmailJS service ID
-        "YOUR_TEMPLATE_ID", // Replace with your actual EmailJS template ID
-        templateParams,
+        "service_9cgjse2",
+        "template_7yvvvxj",
+        {
+          from_name: formData.name,
+          from_email: formData.email,
+          service_interest: formData.service,
+          message: formData.message,
+          to_email: "bytefixers2024@gmail.com",
+        },
       );
 
       console.log("Email sent successfully:", response);
 
       toast({
         title: "Email sent!",
-        description: "Your message has been sent to bytefixers2024@gmail.com",
+        description: "Your message has been sent successfully!",
       });
 
       setFormData({
@@ -77,11 +90,34 @@ export default function ContactForm({
         service: "",
         message: "",
       });
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to send email:", error);
+
+      // Provide more specific error messages based on the error type
+      let errorMessage = "Failed to send email. Please try again later.";
+
+      if (error.message) {
+        if (error.message.includes("Public Key")) {
+          errorMessage =
+            "EmailJS Public Key is not configured. Please contact the administrator.";
+        } else if (error.message.includes("Template ID")) {
+          errorMessage =
+            "EmailJS Template ID is not configured. Please contact the administrator.";
+        } else if (
+          error.status === 400 ||
+          error.status === 401 ||
+          error.status === 403
+        ) {
+          errorMessage =
+            "Authentication error with email service. Please contact the administrator.";
+        } else if (error.status === 429) {
+          errorMessage = "Too many requests. Please try again later.";
+        }
+      }
+
       toast({
         title: "Error",
-        description: "Failed to send email. Please try again later.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {
@@ -90,8 +126,11 @@ export default function ContactForm({
   };
 
   return (
-    <div className="bg-background" id="contact">
-      <form onSubmit={handleSubmit} className="space-y-6">
+    <div
+      className="bg-background rounded-xl shadow-lg p-6 border border-gray-100"
+      id="contact"
+    >
+      <form onSubmit={handleSubmit} className="space-y-6" id="contact-form">
         <div className="space-y-2">
           <Label htmlFor="name">Name</Label>
           <Input
@@ -117,7 +156,11 @@ export default function ContactForm({
         </div>
         <div className="space-y-2">
           <Label htmlFor="service">Service Interest</Label>
-          <Select value={formData.service} onValueChange={handleServiceChange}>
+          <Select
+            value={formData.service}
+            onValueChange={handleServiceChange}
+            name="service"
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select a service" />
             </SelectTrigger>

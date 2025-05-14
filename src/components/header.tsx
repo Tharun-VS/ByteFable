@@ -23,14 +23,14 @@ export default function Header() {
       <Container>
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center">
-            <a href="#" className="text-xl font-bold">
-              Tech Services
+            <a href="/" className="text-xl font-bold">
+              ByteFable
             </a>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
-            <a href="#" className="text-sm font-medium hover:text-primary">
+            <a href="/" className="text-sm font-medium hover:text-primary">
               Home
             </a>
             <a
@@ -67,7 +67,7 @@ export default function Header() {
           <div className="md:hidden py-4 border-t">
             <nav className="flex flex-col space-y-4">
               <a
-                href="#"
+                href="/"
                 className="text-sm font-medium hover:text-primary"
                 onClick={() => setIsMobileMenuOpen(false)}
               >

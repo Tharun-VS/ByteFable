@@ -101,6 +101,13 @@ export default function Services() {
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-3 mb-8">
+            <img
+              src="https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?w=1200&q=80"
+              alt="Tech services"
+              className="w-full h-64 object-cover rounded-lg shadow-md"
+            />
+          </div>
           {services.map((service, index) => (
             <ServiceCard
               key={index}
